@@ -2,7 +2,7 @@ package Assignment1;
 
 import java.util.Scanner;
 
-public class Pattern {
+public class Assgn1_Pattern {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

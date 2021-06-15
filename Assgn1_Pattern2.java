@@ -2,7 +2,7 @@ package Assignment1;
 
 import java.util.Scanner;
 
-public class Pattern2 {
+public class Assgn1_Pattern2 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -11,6 +11,7 @@ public class Pattern2 {
 		Scanner in=new Scanner(System.in);
 		int size=in.nextInt();
 		int limit=size;
+		in.close();
 		if(size>0) {
 		//upper line
 		System.out.print("+");
@@ -103,5 +104,6 @@ public class Pattern2 {
 		System.out.println("+");
 		}
 	}
+	
 
 }
