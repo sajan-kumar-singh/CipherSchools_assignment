@@ -1,9 +1,9 @@
-package Project;
+package Assignment1;
 import java.io.*;
 import java.util.Scanner;
-public class Project {
+public class CipherSchoolsProject {
 	private Node root;//beginning node creation
-	Project() {
+	CipherSchoolsProject() {
 		root=new Node('\0');//beginning node null value declaration
 	}
 	public void insert(String word) {
@@ -47,7 +47,7 @@ public class Project {
 	public boolean findWord(String s) throws Exception {
 		boolean flag = false;//take the word and check whether it is present in dictionary file
 	      Scanner sc2 = new Scanner(new FileInputStream
-	    		  ("E:\\CipherSchools assignment\\src\\Project\\dictionary.txt"));//importing dictionary file in sc2 scanner object
+	    		  ("E:\\CipherSchools assignment\\src\\Assignment1\\dictionary.txt"));//importing dictionary file in sc2 scanner object
 	      while(sc2.hasNextLine()) {//checking whether word is present
 	         String line = sc2.nextLine();
 	         if(line.indexOf(s)!=-1) {
@@ -63,34 +63,41 @@ public class Project {
 	      }
 	}
 	public static void main(String[] args) throws Exception {
-		  Project p=new Project();//object initialization
-		  System.out.println("Enter the word to be found in Dictionary");
+		CipherSchoolsProject p=new CipherSchoolsProject();//object initialization
+		System.out.println("Enter the word to be found in Dictionary");
 		  Scanner sc1 = new Scanner(System.in);//word we want to find
 	      String word = sc1.next();
 	      boolean result=p.findWord(word);//to check whether word is available in dictionary or not
 	      if(result) {
-	    	  System.out.println("Word found in dictionary");
+	    	  System.out.println("Word "+word+" found in dictionary");
 	    	  //procedure if word in present in dictionary
 			  result=p.search(word);
 		      if(result) {
-		    	  System.out.println("Word is present in trie");
+		    	  System.out.println("Word "+word+" is present in trie");
 		      }
 		      else {
-		    	  System.out.println("Word is not present is trie");
+		    	  System.out.println("Word "+word+" is not present is trie");
 		      }
 		      p.insert(word);
 		      System.out.println("Word Inserted");
 		      result=p.search(word);
 		      if(result) {
-		    	  System.out.println("Word is present in trie");
+		    	  System.out.println("Word "+word+" is present in trie");
 		      }
 		      else {
-		    	  System.out.println("Word is not present is trie");
+		    	  System.out.println("Word "+word+"is not present is trie");
+		      }
+		      result=p.startsWith(word.substring(0,word.length()-1));
+		      if(result) {
+		    	  System.out.println("Word "+word.substring(0,word.length()-1)+" is present in trie");
+		      }
+		      else {
+		    	  System.out.println("Word "+word.substring(0,word.length()-1)+" is not present is trie");
 		      }
 	      }
 	      else {
 	    	  //if word is not present in dictionary
-	    	  System.out.println("Word not found");
+	    	  System.out.println("Word not found in dictionary");
 	      }
 	      sc1.close();
 	}
