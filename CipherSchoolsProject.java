@@ -1,39 +1,18 @@
 package Assignment1;
-import java.io.*;
-import java.util.Scanner;
+
+
+import java.io.FileInputStream;
+
+
+import java.util.*;
+
+
 public class CipherSchoolsProject {
-	private Node root;//beginning node creation
-	CipherSchoolsProject() {
-		root=new Node('\0');//beginning node null value declaration
-	}
-	public void insert(String word) {
-		Node curr=root;//pointing curr variable to root
-		for(int i=0;i<word.length();i++) {//creation of nodes of trie tree
-			char c=word.charAt(i);
-			if(curr.children[c-'a']==null) {
-				curr.children[c-'a']=new Node(c);
-			}
-			curr=curr.children[c-'a'];
-		}
-		curr.isWord=true;//mark end node as true to understand where the word ends
-	}
-	public boolean search(String word) {
-		Node node=getNode(word);//check the value of isWord and return the word is present of not
-		return node!=null&&node.isWord;
-	}
-	public boolean startsWith(String prefix) {
-		return getNode(prefix)!=null;//check the curr variable point to null or not and return 
-	}
-	private Node getNode(String word) {
-		Node curr=root;
-		for(int i=0;i<word.length();i++) {
-			char c=word.charAt(i);
-			if(curr.children[c-'a']==null) return null;
-			curr=curr.children[c-'a'];
-		}
-		return curr;//traverse the word for start with and search and return the curr pointer
-	}
-	class Node{//creation of each node
+	
+	public HashSet<String> words = new HashSet<>();
+	static final int M = 4, N = 4;
+	
+	class Node{//Structure of each node
 		public char c;
 		public boolean isWord;//mark the ending character to find the word
 		public Node[] children;//store all the children character of a node character
@@ -44,39 +23,117 @@ public class CipherSchoolsProject {
 			children=new Node[26];
 		}
 	}
-	public static void main(String[] args) throws Exception {
-		CipherSchoolsProject p=new CipherSchoolsProject();//object initialization
-		System.out.println("Before trie formation......\n\n");
-		String[] words= {"sajan","play","zzz","hello","cipherschools"};
-		for(int i=0;i<words.length-1;i++) {
-			if(p.startsWith(words[i])||p.search(words[i])) {
-				System.out.println(words[i]+" is present in trie");
+	
+	
+	public Node root;//Root node of Trie
+	
+	
+	CipherSchoolsProject() {
+		root=new Node('\0');//beginning node blank value declaration
+	}
+	
+	
+	public void insert(String word) {//Function for Trie creation
+		Node curr=root;//pointing curr variable to root
+		for(int i=0;i<word.length();i++) {//creation of nodes of trie tree
+			char c=word.charAt(i);
+			if(curr.children[c-'a']==null) {
+				curr.children[c-'a']=new Node(c);
 			}
-			else {
-				System.out.println(words[i]+" is not present in trie");
-			}
+			curr=curr.children[c-'a'];
 		}
-		System.out.println("\n\nMaking trie of dictionary...\n\n");
+		curr.isWord=true;//mark end node as true to understand where the word ends
+	}
+	
+	
+	public boolean search(String word) {
+		Node node=getNode(word);//check the word till the end
+		return node!=null&&node.isWord;
+	}
+	
+	
+	public boolean startsWith(String prefix) {
+		return getNode(prefix)!=null;//check the word upto certain point
+	}
+	
+	
+	public Node getNode(String word) {
+		Node curr=root;
+		for(int i=0;i<word.length();i++) {
+			char c=word.charAt(i);
+			if(curr.children[c-'a']==null) return null;
+			curr=curr.children[c-'a'];
+		}
+		return curr;//Common funtion for startWith and search functions to find word in Trie
+	}
+	
+	// A recursive function to print all words present on boggle
+    static void findWordsUtil(char boggle[][], boolean visited[][], int i,
+                              int j, String str)
+    {
+    	HashSet<String> words = new HashSet<>();
+        // Mark current cell as visited and append current character
+        // to str
+        visited[i][j] = true;
+        str = str + boggle[i][j];
+ 
+        // If str is present in dictionary, then print it
+        if (str.length()>3)
+            words.add(str);
+ 
+        // Traverse 8 adjacent cells of boggle[i][j]
+        for (int row = i - 1; row <= i + 1 && row < M; row++)
+            for (int col = j - 1; col <= j + 1 && col < N; col++)
+                if (row >= 0 && col >= 0 && !visited[row][col])
+                    findWordsUtil(boggle, visited, row, col, str);
+ 
+        // Erase current character from string and mark visited
+        // of current cell as false
+        str = "" + str.charAt(str.length() - 1);
+        visited[i][j] = false;
+    }
+ 
+    // Prints all words present in dictionary.
+    static void findWords(char boggle[][])
+    {
+        // Mark all characters as not visited
+        boolean visited[][] = new boolean[M][N];
+ 
+        // Initialize current string
+        String str = "";
+ 
+        // Consider every character and look for all words
+        // starting with this character
+        for (int i = 0; i < M; i++)
+            for (int j = 0; j < N; j++)
+                findWordsUtil(boggle, visited, i, j, str);
+    }
+    
+	public static void main(String[] args) throws Exception {
+		
+		CipherSchoolsProject boggle=new CipherSchoolsProject();
+		
+		char characters[][] = { { 'G', 'I', 'Z', 'S' },
+                { 'U', 'E', 'K' , 'A'},
+                { 'Q', 'S', 'E' , 'O' }, 
+                { 'J', 'U', 'B' , 'M'}};
+		
+		
 		Scanner sc2 = new Scanner(new FileInputStream
 	    		  ("E:\\CipherSchools assignment\\src\\Assignment1\\dictionary.txt"));//importing dictionary file in sc2 scanner object
 		while(sc2.hasNextLine()) {//checking whether word is present
 	         String line = sc2.nextLine();
-	         if(p.startsWith(line)||p.search(line)) {
+	         if(boggle.startsWith(line)||boggle.search(line)) {
 	        	 continue;
 	         }
 	         else {
-	        	 p.insert(line);
+	        	 boggle.insert(line);
 	         }
 		}
-		System.out.println("After trie formation completions......\n\n");
-		for(int i=0;i<words.length-1;i++) {
-			if(p.startsWith(words[i])||p.search(words[i])) {
-				System.out.println(words[i]+" is present in trie");
-			}
-			else {
-				System.out.println(words[i]+" is not present in trie");
-			}
-		}
+		System.out.println("Iterating over list:");
+        Iterator<String> i = boggle.words.iterator();
+        while (i.hasNext())
+            System.out.println(i.next());
 	}
 }
 
